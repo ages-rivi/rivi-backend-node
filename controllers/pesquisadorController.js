@@ -2,26 +2,44 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
 // GET - retorna todos pesquisadores
-const getPesquisadores = async (req, res) => {
-  const pesquisadores = await prisma.pesquisador.findMany();
-  console.log(pesquisadores);
+const getAllPesquisadores = async (req, res) => {
+  try {
+    const pesquisadores = await prisma.pesquisador.findMany();
+    console.log(pesquisadores);
+    return res.json(pesquisadores);
+  } catch (error) {
+    return res.json({ error: error.message });
+  }
 };
 
 // GET - retorna um único pesquisador
 const getPesquisador = async (req, res) => {
-  const pesquisador = await prisma.pesquisador.findUnique({
-    where: {
-      id: '6338da2020e0b5c916df9917',
-    },
-  });
-  console.log(pesquisadores);
+  try {
+    const { id } = req.params;
+    const pesquisador = await prisma.pesquisador.findUnique({
+      where: {
+        id: id,
+      },
+    });
+    console.log(pesquisador);
+    return res.json(pesquisador);
+  } catch (error) {
+    return res.json({ error: error.message });
+  }
 };
 
 // POST - cria um pesquisador
 const createPesquisador = async (req, res) => {
   const { nome, email, descricao, afiliacao, tag, foto, contatos, projetos, artigos } = req.body;
+
+  // valida se já existe email cadastrado
+  let pesquisador = await prisma.pesquisador.findUnique({ where: { email } });
+  if (pesquisador) {
+    return res.json({ error: 'Já existe um usuário com este email.' });
+  }
+
   try {
-    const pesquisador = await prisma.pesquisador.create({
+    pesquisador = await prisma.pesquisador.create({
       data: {
         nome,
         email,
@@ -47,11 +65,11 @@ const createPesquisador = async (req, res) => {
       },
     });
     res.status(200).json(pesquisador);
+    res.json({ mssg: 'Novo pesquisador criado!' });
+    console.log(pesquisador);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
-
-  res.json({ mssg: 'CRIA um novo pesquisador' });
 };
 
 // UPDATE - atualiza um pesquisador
@@ -61,8 +79,8 @@ const updatePesquisador = async (req, res) => {};
 const deletePesquisador = async (req, res) => {};
 
 module.exports = {
-  getPesquisadores,
-  getPesquisadores,
+  getAllPesquisadores,
+  getPesquisador,
   createPesquisador,
   updatePesquisador,
   deletePesquisador,

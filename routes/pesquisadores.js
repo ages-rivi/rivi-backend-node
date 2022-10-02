@@ -1,7 +1,7 @@
 const express = require('express');
 const {
   createPesquisador,
-  getPesquisadores,
+  getAllPesquisadores,
   getPesquisador,
   updatePesquisador,
   deletePesquisador,
@@ -9,28 +9,23 @@ const {
 
 const router = express.Router();
 
-router.get('/', (getPesquisadores) => {
-  res.json({ mssg: 'RETORNA todos os pesquisadores' });
-});
+// GET - retorna todos pesquisadores
+router.get('/', getAllPesquisadores);
 
-router.get('/:id', (getPesquisador) => {
-  res.json({ mssg: 'RETORNA um pesquisador' });
-});
+// GET - retorna um único pesquisador
+router.get('/:id', getPesquisador);
 
-router.post('/', (req, res) => {
-  res.json({ mssg: 'CRIA um novo pesquisador' });
-});
+// POST - cria um pesquisador
+router.post('/adicionaPesquisador', createPesquisador);
 
-router.post('/adicionaPesquisador', (createPesquisador) => {
-  res.json({ mssg: 'CRIA um novo pesquisador' });
-});
-
+// UPDATE - atualiza um pesquisador
 router.patch('/:id', (updatePesquisador) => {
-  res.json({ mssg: 'ATUALIZA um pesquisador' });
+  res.json({ mssg: 'Pesquisador atualizado!' });
 });
 
+// DELETE - deleta um pesquisador
 router.delete('/:id', (deletePesquisador) => {
-  res.json({ mssg: 'DELETA um pesquisador' });
+  res.json({ mssg: 'Pesquisador deletado!' });
 });
 
 module.exports = router;
