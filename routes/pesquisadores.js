@@ -19,13 +19,9 @@ router.get('/:id', getPesquisador);
 router.post('/adicionaPesquisador', createPesquisador);
 
 // UPDATE - atualiza um pesquisador
-router.patch('/:id', (updatePesquisador) => {
-  res.json({ mssg: 'Pesquisador atualizado!' });
-});
+router.patch('/:id', updatePesquisador);
 
 // DELETE - deleta um pesquisador
-router.delete('/:id', (deletePesquisador) => {
-  res.json({ mssg: 'Pesquisador deletado!' });
-});
+router.delete('/:id', deletePesquisador);
 
 module.exports = router;
