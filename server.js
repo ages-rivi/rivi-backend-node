@@ -1,11 +1,11 @@
 require('dotenv').config();
-
 const express = require('express');
 const mongoose = require('mongoose');
+const pesquisadoresRoutes = require('./routes/pesquisadores');
 
 // express app
 const app = express();
-
+app.use(express.json());
 // middleware
 app.use((req, res, next) => {
   console.log(req.path, req.method);
@@ -25,6 +25,4 @@ mongoose
     console.log(error);
   });
 
-app.get('/', (req, res) => {
-  res.json({ mssg: 'Welcome to the app' });
-});
+app.use('/api/pesquisadores', pesquisadoresRoutes);
