@@ -68,7 +68,7 @@ const createPesquisador = async (req, res) => {
       },
     });
     res.status(200).json(pesquisador);
-    res.json({ mssg: 'Novo pesquisador criado!' });
+    //res.json({ mssg: 'Novo pesquisador criado!' });
     console.log(pesquisador);
   } catch (error) {
     res.status(400).json({ error: error.message });
