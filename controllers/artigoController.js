@@ -35,12 +35,6 @@ const getArtigo = async (req, res) => {
 const createArtigo = async (req, res) => {
   const { doi, titulo, descricao, citacao, afiliacao, link, tag, pesquisadores } = req.body;
 
-  // valida se já existe email cadastrado
-  let artigo = await prisma.artigo.findUnique({ where: { email } });
-  if (artigo) {
-    return res.json({ error: 'Já existe um usuário com este email.' });
-  }
-
   try {
     artigo = await prisma.artigo.create({
       data: {
@@ -52,16 +46,16 @@ const createArtigo = async (req, res) => {
         link,
         tag: tag,
         pesquisadores: {
-            create: [
-                pesquisadores.nome,
-                pesquisadores.email,
-                pesquisadores.descricao,
-                pesquisadores.afiliacao,
-                pesquisadores.tag,
-                pesquisadores.foto,
-                pesquisadores.contatos,
-            ]
-        }
+          create: [
+            pesquisadores.nome,
+            pesquisadores.email,
+            pesquisadores.descricao,
+            pesquisadores.afiliacao,
+            pesquisadores.tag,
+            pesquisadores.foto,
+            pesquisadores.contatos,
+          ],
+        },
       },
     });
     res.status(200).json(artigo);
@@ -100,16 +94,16 @@ const updateArtigo = async (req, res) => {
         link,
         tag: tag,
         pesquisadores: {
-            create: [
-                pesquisadores.nome,
-                pesquisadores.email,
-                pesquisadores.descricao,
-                pesquisadores.afiliacao,
-                pesquisadores.tag,
-                pesquisadores.foto,
-                pesquisadores.contatos,
-            ]
-        }
+          create: [
+            pesquisadores.nome,
+            pesquisadores.email,
+            pesquisadores.descricao,
+            pesquisadores.afiliacao,
+            pesquisadores.tag,
+            pesquisadores.foto,
+            pesquisadores.contatos,
+          ],
+        },
       },
     });
     console.log(artigo);
@@ -144,9 +138,9 @@ const deleteArtigo = async (req, res) => {
 };
 
 module.exports = {
-    createArtigo,
-    getAllArtigos,
-    getArtigo,
-    updateArtigo,
-    deleteArtigos,
+  createArtigo,
+  getAllArtigos,
+  getArtigo,
+  updateArtigo,
+  deleteArtigo,
 };

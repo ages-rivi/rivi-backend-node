@@ -4,7 +4,7 @@ const {
   getAllArtigos,
   getArtigo,
   updateArtigo,
-  deleteArtigos,
+  deleteArtigo,
 } = require('../controllers/artigoController');
 
 const router = express.Router();
@@ -22,6 +22,6 @@ router.post('/adicionaArtigo', createArtigo);
 router.patch('/:id', updateArtigo);
 
 // DELETE - deleta um artigo
-router.delete('/:id', deleteArtigos);
+router.delete('/:id', deleteArtigo);
 
 module.exports = router;
