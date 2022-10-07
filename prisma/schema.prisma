@@ -1,0 +1,85 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url = env("MONGO_URI")
+}
+
+model Usuario {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  nome String
+  username String @unique
+  email String @unique
+  senha String
+  genero String
+  dataNasc DateTime 
+  notificacao Boolean
+  interesse String[]
+  questionariosIds String[] @db.ObjectId
+  questionarios Questionario[] @relation(fields: [questionariosIds], references: [id])
+  tags String[]
+}
+
+model Questionario {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  titulo String
+  termo String
+  descricao String
+  link String
+  calculo String
+  usuariosIds String[] @db.ObjectId
+  usuarios Usuario[] @relation(fields: [usuariosIds], references: [id])
+  tags String[]
+}
+
+
+model Tag {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  nome String @unique
+  descricao String
+}
+
+model Projeto {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  titulo String
+  descricao String
+  estado String
+  tag String[]
+  pesquisadoresIds String[] @db.ObjectId
+  pesquisadores Pesquisador[] @relation(fields: [pesquisadoresIds], references: [id])
+}
+
+model Pesquisador {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  nome String
+  email String @unique
+  descricao String
+  afiliacao String
+  tag String[]
+  foto String
+  contatos Contato[]
+  projetosIds String[] @db.ObjectId
+  projetos Projeto[] @relation(fields: [projetosIds], references: [id])
+  artigosIds String[] @db.ObjectId
+  artigos Artigo[] @relation(fields: [artigosIds], references: [id])
+}
+
+model Artigo {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  doi Int
+  titulo String
+  descricao String
+  citacao String
+  afiliacao String
+  link String
+  tag String[]
+  pesquisadoresIds String[] @db.ObjectId
+  pesquisadores Pesquisador[] @relation(fields: [pesquisadoresIds], references: [id])
+}
+
+type Contato {
+  nome String
+  link String
+}
