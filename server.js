@@ -24,5 +24,5 @@ mongoose
     console.log(error);
   });
 
-  app.use('/api/pesquisadores', require('./routes/pesquisadores'));
-  //app.use('/api/projetos', require('./routes/projetos'));
+app.use('/api/pesquisadores', require('./routes/pesquisadores'));
+//app.use('/api/projetos', require('./routes/projetos'));
