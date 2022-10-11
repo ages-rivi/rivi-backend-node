@@ -1,8 +1,6 @@
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
-const pesquisadoresRoutes = require('./routes/pesquisadores');
-const artigosRoutes = require('./routes/artigos');
 
 // express app
 const app = express();
@@ -26,5 +24,6 @@ mongoose
     console.log(error);
   });
 
-app.use('/api/pesquisadores', pesquisadoresRoutes);
-app.use('/api/artigos', artigosRoutes);
+app.use('/api/pesquisadores', require('./routes/pesquisadores'));
+app.use('/api/artigos', require('./routes/artigos'));
+app.use('/api/projetos', require('./routes/projetos'));
