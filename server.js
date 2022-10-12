@@ -27,3 +27,7 @@ mongoose
 app.use('/api/pesquisadores', require('./routes/pesquisadores'));
 app.use('/api/artigos', require('./routes/artigos'));
 app.use('/api/projetos', require('./routes/projetos'));
+
+app.get('/', (req, res) => {
+  res.send('UP!')
+})
