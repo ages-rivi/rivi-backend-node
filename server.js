@@ -2,14 +2,31 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const swaggerUi = require('swagger-ui-express');
-const swaggerDocument = require('./swagger.json');
+const swaggerJsDoc = require('swagger-jsdoc');
 
 // express app
 const app = express();
 app.use(express.json());
 
 // register swagger
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+const swaggerOptions = {
+  swaggerDefinition: {
+    openapi: '3.0.0',
+    info: {
+      version: '1.0.0',
+      title: 'Rivi API',
+      description: 'Informações sobre a API do Rivi.',
+    },
+    servers: [
+      {
+        url: 'http://localhost:4000',
+      },
+    ],
+  },
+  apis: ['./routes/*.js'],
+};
+const swaggerDocs = swaggerJsDoc(swaggerOptions);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 console.log('Swagger running on http://localhost:4000/api-docs');
 
 // register middleware
