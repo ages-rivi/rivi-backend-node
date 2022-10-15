@@ -39,7 +39,6 @@ npm run dev
 
 Entre em [http://localhost:4000](http://localhost:4000) para visualizar a aplicação.
 
-
 ## Ferramentas
 
 Iniciando o projeto, é importante notar que foram aplicadas regras de
@@ -69,6 +68,7 @@ Configurações definidas:
 "tabWidth": 2        --> Identa usando 2 espaços
 "printWidth": 100    --> Define tamanho máximo de uma linha do código
 ```
+
 ### **2. Conventional Commits**
 
 O Conventional Commits é um padrão de commit vastamente utilizado na indústria, inicialmente concebido pelo Google Angular, [veja mais sobre aqui!](https://www.conventionalcommits.org/en/v1.0.0/)
@@ -91,4 +91,26 @@ Commits que fojem dos padrões de commit do Conventional Commits serão rejeitad
 
 ## Banco de dados
 
-Para realizar a conexão com o MongoDB, é necessário adicionar o URI na variável ``` MONGO_URI ``` no arquivo [.env](.env)
+Para realizar a conexão com o MongoDB, é necessário adicionar o URI na variável `MONGO_URI` no arquivo [.env](.env)
+
+## DEPLOY NA URL DE PRODUÇÃO
+
+Para acontecer o deploy na url disponibilizada para o cliente, devemos fazer o seguinte:
+
+- Clonar o projeto e dar um pull na main
+
+- Adicionar um novo remote a configuração do git:
+
+```
+git remote add github https://github.com/ages-rivi/rivi-backend-node.git
+```
+
+- Enviar as mudanças para o repositório do github:
+
+```
+git push github
+```
+
+- Vai ser requisitado o login, estão disponíveis no discord do grupo
+
+O projeto está com deploy configurado na plataforma render.com
