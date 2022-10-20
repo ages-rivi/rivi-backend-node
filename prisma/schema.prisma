@@ -75,7 +75,7 @@ model Artigo {
   afiliacao String
   link String
   tag String[]
-  pesquisadoresIds String[] @db.ObjectId
+  pesquisadoresIds String[] @db.ObjectId  
   pesquisadores Pesquisador[] @relation(fields: [pesquisadoresIds], references: [id])
 }
 
