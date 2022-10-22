@@ -4,7 +4,21 @@ const prisma = new PrismaClient();
 // GET - retorna todos projetos
 const getAllProjetos = async (req, res) => {
   try {
-    const projetos = await prisma.projeto.findMany();
+    const projetos = await prisma.projeto.findMany({
+      select:{
+        id: true,
+        titulo: true,
+        descricao: true,
+        estado: true,
+        tag: true,
+        pesquisadores: {
+          select: {
+            nome: true,
+            afiliacao: true
+          }
+        }
+      }
+    });
     console.log(projetos);
     return res.status(200).json(projetos);
   } catch (error) {
@@ -20,6 +34,19 @@ const getProjeto = async (req, res) => {
       where: {
         id: id,
       },
+      select:{
+        id: true,
+        titulo: true,
+        descricao: true,
+        estado: true,
+        tag: true,
+        pesquisadores: {
+          select: {
+            nome: true,
+            afiliacao: true
+          }
+        }
+      }
     });
     if (!projeto) {
       return res.status(404).json({ error: 'Não foi possível encontrar este projeto.' });
@@ -30,37 +57,6 @@ const getProjeto = async (req, res) => {
     return res.status(400).json({ error: error.message });
   }
 };
-
-// GET - retorna os pesquisadores de um projeto
-const getPesquisadoresByProject = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const projeto = await prisma.projeto.findUnique({
-      where: {
-        id: id,
-      },
-    });
-    if (!projeto) {
-      return res.status(404).json({ error: 'Não foi possível encontrar este projeto.' });
-    }
-    let pesquisadores = await prisma.pesquisador.findMany({
-      where: {
-        projetos: {
-          some : { id }
-        }
-      },
-      select: {
-        nome: true,
-        afiliacao: true
-      }
-    });
-    console.log(pesquisadores);
-    return res.status(200).json(pesquisadores);
-  } catch (error) {
-    return res.status(400).json({ error: error.message });
-  }
-}
-
 
 // POST - cria um projeto
 const createProjeto = async (req, res) => {
@@ -174,7 +170,6 @@ const deleteProjeto = async (req, res) => {
 module.exports = {
   getAllProjetos,
   getProjeto,
-  getPesquisadoresByProject,
   createProjeto,
   updateProjeto,
   deleteProjeto,
