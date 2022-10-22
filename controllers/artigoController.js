@@ -4,11 +4,11 @@ const prisma = new PrismaClient();
 // GET - retorna todos artigos
 const getAllArtigos = async (req, res) => {
   try {
-    const artigos = await prisma.artigo.findMany();
-    console.log(artigos);
-    return res.json(artigos);
+    const articles = await prisma.article.findMany();
+    console.log(articles);
+    return res.status(200).json(articles);
   } catch (error) {
-    return res.json({ error: error.message });
+    return res.status(400).json({ error: error.message });
   }
 };
 
@@ -16,53 +16,44 @@ const getAllArtigos = async (req, res) => {
 const getArtigo = async (req, res) => {
   try {
     const { id } = req.params;
-    const artigo = await prisma.artigo.findUnique({
+    const article = await prisma.article.findUnique({
       where: {
         id: id,
       },
     });
-    if (!artigo) {
-      return res.json({ error: 'Não foi possível encontrar este artigo.' });
+    if (!article) {
+      return res.status(404).json({ error: 'Não foi possível encontrar este artigo.' });
     }
-    console.log(artigo);
-    return res.json(artigo);
+    console.log(article);
+    return res.status(200).json(article);
   } catch (error) {
-    return res.json({ error: error.message });
+    return res.status(400).json({ error: error.message });
   }
 };
 
 // POST - cria um artigo
 const createArtigo = async (req, res) => {
-  const { doi, titulo, descricao, citacao, afiliacao, link, tag, pesquisadores } = req.body;
+  const { title, description, category, tags, abstract, location, date, pdf_link, membersIds } =
+    req.body;
 
   try {
-    artigo = await prisma.artigo.create({
+    article = await prisma.article.create({
       data: {
-        doi,
-        titulo,
-        descricao,
-        citacao,
-        afiliacao,
-        link,
-        tag: tag,
-        pesquisadores: {
-          create: [
-            pesquisadores.nome,
-            pesquisadores.email,
-            pesquisadores.descricao,
-            pesquisadores.afiliacao,
-            pesquisadores.tag,
-            pesquisadores.foto,
-            pesquisadores.contatos,
-          ],
-        },
+        title,
+        description,
+        category,
+        tags: tags,
+        abstract,
+        location,
+        date,
+        pdf_link,
+        membersIds: membersIds,
       },
     });
-    res.status(200).json(artigo);
-    //res.json({ mssg: 'Novo artigo criado!' });
-    console.log(artigo);
+    console.log(article);
+    return res.status(201).json(article);
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    return res.status(400).json({ error: error.message });
   }
 };
 
@@ -70,46 +61,38 @@ const createArtigo = async (req, res) => {
 const updateArtigo = async (req, res) => {
   try {
     const { id } = req.params;
-    const { doi, titulo, descricao, citacao, afiliacao, link, tag, pesquisadores } = req.body;
+    const { title, description, category, tags, abstract, location, date, pdf_link, membersIds } =
+      req.body;
 
-    let artigo = await prisma.artigo.findUnique({
+    let article = await prisma.article.findUnique({
       where: {
         id: id,
       },
     });
-    if (!artigo) {
-      return res.json({ error: 'Não foi possível encontrar este artigo.' });
+    if (!article) {
+      return res.status(404).json({ error: 'Não foi possível encontrar este artigo.' });
     }
 
-    artigo = await prisma.artigo.update({
+    article = await prisma.article.update({
       where: {
         id: id,
       },
       data: {
-        doi,
-        titulo,
-        descricao,
-        citacao,
-        afiliacao,
-        link,
-        tag: tag,
-        pesquisadores: {
-          create: [
-            pesquisadores.nome,
-            pesquisadores.email,
-            pesquisadores.descricao,
-            pesquisadores.afiliacao,
-            pesquisadores.tag,
-            pesquisadores.foto,
-            pesquisadores.contatos,
-          ],
-        },
+        title,
+        description,
+        category,
+        tags: tags,
+        abstract,
+        location,
+        date,
+        pdf_link,
+        membersIds: membersIds,
       },
     });
-    console.log(artigo);
-    return res.json(artigo);
+    console.log(article);
+    return res.status(200).json(article);
   } catch (error) {
-    return res.json({ error });
+    return res.status(400).json({ error: error.message });
   }
 };
 
@@ -117,23 +100,23 @@ const updateArtigo = async (req, res) => {
 const deleteArtigo = async (req, res) => {
   try {
     const { id } = req.params;
-    let artigo = await prisma.artigo.findUnique({
+    let article = await prisma.article.findUnique({
       where: {
         id: id,
       },
     });
-    if (!artigo) {
-      return res.json({ error: 'Não foi possível encontrar este artigo.' });
+    if (!article) {
+      return res.status(404).json({ error: 'Não foi possível encontrar este artigo.' });
     }
 
-    await prisma.artigo.delete({
+    await prisma.article.delete({
       where: {
         id: id,
       },
     });
-    return res.json({ mssg: 'artigo deletado!' });
+    return res.status(200).json({ mssg: 'artigo deletado!' });
   } catch (error) {
-    return res.json({ error });
+    return res.status(400).json({ error: error.message });
   }
 };
 

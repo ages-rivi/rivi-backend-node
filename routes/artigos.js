@@ -16,7 +16,7 @@ router.get('/', getAllArtigos);
 router.get('/:id', getArtigo);
 
 // POST - cria um artigo
-router.post('/adicionaArtigo', createArtigo);
+router.post('/addArticle', createArtigo);
 
 // UPDATE - atualiza um artigo
 router.patch('/:id', updateArtigo);
