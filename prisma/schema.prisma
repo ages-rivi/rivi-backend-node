@@ -63,20 +63,21 @@ model Pesquisador {
   projetosIds String[] @db.ObjectId
   projetos Projeto[] @relation(fields: [projetosIds], references: [id])
   artigosIds String[] @db.ObjectId
-  artigos Artigo[] @relation(fields: [artigosIds], references: [id])
+  artigos Article[] @relation(fields: [artigosIds], references: [id])
 }
 
-model Artigo {
+model Article {
   id String @id @default(auto()) @map("_id") @db.ObjectId
-  doi Int
-  titulo String
-  descricao String
-  citacao String
-  afiliacao String
-  link String
-  tag String[]
-  pesquisadoresIds String[] @db.ObjectId
-  pesquisadores Pesquisador[] @relation(fields: [pesquisadoresIds], references: [id])
+  title String
+  description String
+  category String
+  tags String[]
+  abstract String
+  location String
+  date String
+  pdf_link String
+  membersIds String[] @db.ObjectId
+  pesquisadores Pesquisador[] @relation(fields: [membersIds], references: [id])
 }
 
 type Contato {
