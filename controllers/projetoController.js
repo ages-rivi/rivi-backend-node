@@ -31,6 +31,37 @@ const getProjeto = async (req, res) => {
   }
 };
 
+// GET - retorna os pesquisadores de um projeto
+const getPesquisadoresByProject = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const projeto = await prisma.projeto.findUnique({
+      where: {
+        id: id,
+      },
+    });
+    if (!projeto) {
+      return res.status(404).json({ error: 'Não foi possível encontrar este projeto.' });
+    }
+    let pesquisadores = await prisma.pesquisador.findMany({
+      where: {
+        projetos: {
+          some : { id }
+        }
+      },
+      select: {
+        nome: true,
+        afiliacao: true
+      }
+    });
+    console.log(pesquisadores);
+    return res.status(200).json(pesquisadores);
+  } catch (error) {
+    return res.status(400).json({ error: error.message });
+  }
+}
+
+
 // POST - cria um projeto
 const createProjeto = async (req, res) => {
   const { titulo, descricao, estado, tag, pesquisadores } = req.body;
@@ -42,7 +73,7 @@ const createProjeto = async (req, res) => {
         titulo,
         descricao,
         estado,
-        tag: tag,
+        tag: tag != null ? tag : undefined,
         pesquisadores: {
           connect: novosPesquisadores
         }
@@ -70,29 +101,32 @@ const updateProjeto = async (req, res) => {
       return res.status(404).json({ error: 'Não foi possível encontrar este projeto.' });
     }
 
-    let deletaPesquisadores = projeto.pesquisadoresIds.filter(element => pesquisadores.includes(element)).map((element) => {
-      return {id: element};
-    });
-    let adicionaPesquisadores = pesquisadores.filter(element => !projeto.pesquisadoresIds.includes(element)).map((element) => {
-      return {id: element};
-    });
+    if(pesquisadores != null) {
+      let deletaPesquisadores = projeto.pesquisadoresIds.filter(element => pesquisadores.includes(element)).map((element) => {
+        return {id: element};
+      });
+      let adicionaPesquisadores = pesquisadores.filter(element => !projeto.pesquisadoresIds.includes(element)).map((element) => {
+        return {id: element};
+      });
+      
+      if(deletaPesquisadores.length > 0) {
+        projeto = await prisma.projeto.update({
+          where: {id: id},
+          data: {
+            pesquisadores: { disconnect: deletaPesquisadores }
+          }
+        });
+      }
+      if(adicionaPesquisadores.length > 0) {
+        projeto = await prisma.projeto.update({
+          where: {id: id},
+          data: {
+            pesquisadores: { connect: adicionaPesquisadores }
+          }
+        });
+      }
+    }
     
-    if(deletaPesquisadores.length > 0) {
-      projeto = await prisma.projeto.update({
-        where: {id: id},
-        data: {
-          pesquisadores: { disconnect: deletaPesquisadores }
-        }
-      });
-    }
-    if(adicionaPesquisadores.length > 0) {
-      projeto = await prisma.projeto.update({
-        where: {id: id},
-        data: {
-          pesquisadores: { connect: adicionaPesquisadores }
-        }
-      });
-    }
     
     projeto = await prisma.projeto.update({
       where: {
@@ -140,6 +174,7 @@ const deleteProjeto = async (req, res) => {
 module.exports = {
   getAllProjetos,
   getProjeto,
+  getPesquisadoresByProject,
   createProjeto,
   updateProjeto,
   deleteProjeto,
