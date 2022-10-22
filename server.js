@@ -1,13 +1,13 @@
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
-const cors = require('cors')
+const cors = require('cors');
 const swaggerUi = require('swagger-ui-express');
 const swaggerJsDoc = require('swagger-jsdoc');
 
 // express app
 const app = express();
-app.use(cors())
+app.use(cors());
 app.use(express.json());
 
 // register swagger
@@ -52,9 +52,9 @@ mongoose
 
 // set routes
 app.use('/api/pesquisadores', require('./routes/pesquisadores'));
-app.use('/api/artigos', require('./routes/artigos'));
+app.use('/api/articles', require('./routes/artigos'));
 app.use('/api/projetos', require('./routes/projetos'));
 
 app.get('/', (req, res) => {
-  res.send('UP!')
-})
+  res.send('UP!');
+});
