@@ -12,6 +12,21 @@ const getAllArtigos = async (req, res) => {
   }
 };
 
+// GET - retorna todos artigos
+const getAllArtigosPorId = async (req, res) => {
+  try {
+    const articlesIds = await prisma.article.findMany({
+      select: {
+        id: true,
+      },
+    });
+    console.log(articlesIds);
+    return res.status(200).json(articlesIds);
+  } catch (error) {
+    return res.status(400).json({ error: error.message });
+  }
+};
+
 // GET - retorna um único artigo
 const getArtigo = async (req, res) => {
   try {
@@ -33,8 +48,18 @@ const getArtigo = async (req, res) => {
 
 // POST - cria um artigo
 const createArtigo = async (req, res) => {
-  const { title, description, category, tags, abstract, location, date, pdf_link, membersIds } =
-    req.body;
+  const {
+    title,
+    description,
+    category,
+    tags,
+    abstract,
+    authors,
+    location,
+    date,
+    pdf_link,
+    membersIds,
+  } = req.body;
 
   try {
     article = await prisma.article.create({
@@ -44,6 +69,7 @@ const createArtigo = async (req, res) => {
         category,
         tags: tags,
         abstract,
+        authors: authors,
         location,
         date,
         pdf_link,
@@ -61,8 +87,18 @@ const createArtigo = async (req, res) => {
 const updateArtigo = async (req, res) => {
   try {
     const { id } = req.params;
-    const { title, description, category, tags, abstract, location, date, pdf_link, membersIds } =
-      req.body;
+    const {
+      title,
+      description,
+      category,
+      tags,
+      abstract,
+      authors,
+      location,
+      date,
+      pdf_link,
+      membersIds,
+    } = req.body;
 
     let article = await prisma.article.findUnique({
       where: {
@@ -83,6 +119,7 @@ const updateArtigo = async (req, res) => {
         category,
         tags: tags,
         abstract,
+        authors: authors,
         location,
         date,
         pdf_link,
@@ -123,6 +160,7 @@ const deleteArtigo = async (req, res) => {
 module.exports = {
   createArtigo,
   getAllArtigos,
+  getAllArtigosPorId,
   getArtigo,
   updateArtigo,
   deleteArtigo,

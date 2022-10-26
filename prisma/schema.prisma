@@ -73,6 +73,7 @@ model Article {
   category String
   tags String[]
   abstract String
+  authors String []
   location String
   date String
   pdf_link String
