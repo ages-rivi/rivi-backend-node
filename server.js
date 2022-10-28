@@ -52,7 +52,7 @@ mongoose
 
 // set routes
 app.use('/api/pesquisadores', require('./routes/pesquisadores'));
-app.use('/api/articles', require('./routes/artigos'));
+app.use('/api/article', require('./routes/artigos'));
 app.use('/api/projetos', require('./routes/projetos'));
 
 app.get('/', (req, res) => {
