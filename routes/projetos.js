@@ -9,8 +9,9 @@ const {
 
 const router = express.Router();
 
-// Descreve o componente projeto
 /**
+ * // Descreve o componente Projeto
+ *
  * @swagger
  * components:
  *   schemas:
@@ -20,7 +21,7 @@ const router = express.Router();
  *         - titulo
  *         - descricao
  *         - estado
- *         - tag
+ *         - tags
  *         - pesquisadoresIds
  *       properties:
  *         titulo:
@@ -30,7 +31,7 @@ const router = express.Router();
  *         estado:
  *            type: string
  *            enum: ['ativo', 'finalizado']
- *         tag:
+ *         tags:
  *            type: array
  *            items:
  *              type: string
@@ -40,12 +41,65 @@ const router = express.Router();
  *            items:
  *              type: string
  *            description: array de id's dos pesquisadores vinculados a este projeto.
+ *       example:
+ *         titulo: Cyberbullying entre adolescentes brasileiros
+ *         descricao: Ultimamente destacam-se os esforços...
+ *         estado: ativo
+ *         tags: [Cyberbullying, Autoestima, Depressão]
+ *         pesquisadoresIds: [6338da2020e0b5c916df9917, 6338df7e68a0b1749472b8cd]
  */
 
-// GET - retorna todos pesquisadores
 /**
+ * // Descreve o componente de retorno de Projeto
+ *
  * @swagger
- * /api/projetos:
+ * components:
+ *   schemas:
+ *     Projeto_Response:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: string
+ *         titulo:
+ *           type: string
+ *         descricao:
+ *           type: string
+ *         estado:
+ *           type: string
+ *           enum: ['ativo', 'finalizado']
+ *         tags:
+ *           description: array de tags que o projeto possui.
+ *           type: array
+ *           items:
+ *             type: string
+ *         pesquisadores:
+ *           type: array
+ *           items:
+ *             type: object
+ *             properties:
+ *               nome:
+ *                 type: string
+ *               afiliacao:
+ *                 type: string
+ *           description: array de pesquisadores que o projeto possui.
+ *       example:
+ *         id: 635c6925615b609229191048
+ *         titulo: Cyberbullying entre adolescentes brasileiros
+ *         descricao: Ultimamente destacam-se os esforços...
+ *         estado: ativo
+ *         tags: [Cyberbullying, Autoestima, Depressão]
+ *         pesquisadores:
+ *           - nome: Lucas
+ *             afiliacao: PUCRS
+ *           - nome: Fernando
+ *             afiliacao: UFGRS
+ */
+
+/**
+ * // GET - retorna todos Projetos
+ *
+ * @swagger
+ * /api/projeto:
  *  get:
  *    summary: Retorna todos os projetos.
  *    tags: [Projeto]
@@ -57,21 +111,17 @@ const router = express.Router();
  *             schema:
  *               type: array
  *               items:
- *                 allOf:
- *                   - type: object
- *                     properties:
- *                       id:
- *                         type: string
- *                   - $ref: '#/components/schemas/Projeto'
+ *                 $ref: '#/components/schemas/Projeto_Response'
  *      '400':
  *         description: Requisição falhou.
  */
 router.get('/', getAllProjetos);
 
-// GET - retorna um único pesquisador
 /**
+ * // GET - retorna um único Projeto
+ *
  * @swagger
- * /api/projetos/{id}:
+ * /api/projeto/{id}:
  *  get:
  *    summary: Retorna um projeto a partir de seu id.
  *    tags: [Projeto]
@@ -88,12 +138,7 @@ router.get('/', getAllProjetos);
  *         content:
  *           application/json:
  *             schema:
- *               allOf:
- *                 - type: object
- *                   properties:
- *                     id:
- *                       type: string
- *                 - $ref: '#/components/schemas/Projeto'
+ *               $ref: '#/components/schemas/Projeto_Response'
  *      '404':
  *         description: Não foi possível encontrar este projeto.
  *      '400':
@@ -101,15 +146,15 @@ router.get('/', getAllProjetos);
  */
 router.get('/:id', getProjeto);
 
-// POST - cria um pesquisador
 /**
+ * // POST - cria um Projeto
+ *
  * @swagger
- * /api/projetos/adicionaProjeto:
+ * /api/projeto/adicionaProjeto:
  *  post:
  *    summary: Retorna todos os projetos.
  *    tags: [Projeto]
  *    requestBody:
- *      required: true
  *      content:
  *        application/json:
  *          schema:
@@ -120,21 +165,17 @@ router.get('/:id', getProjeto);
  *         content:
  *           application/json:
  *             schema:
- *               allOf:
- *                 - type: object
- *                   properties:
- *                     id:
- *                       type: string
- *                 - $ref: '#/components/schemas/Projeto'
+ *               $ref: '#/components/schemas/Projeto_Response'
  *      '400':
  *         description: Requisição falhou.
  */
 router.post('/adicionaProjeto', createProjeto);
 
-// UPDATE - atualiza um pesquisador
 /**
+ * // PATCH - atualiza um Projeto
+ *
  * @swagger
- * /api/projetos/{id}:
+ * /api/projeto/{id}:
  *  patch:
  *    summary: Atualiza um projeto a partir de seu id.
  *    tags: [Projeto]
@@ -145,18 +186,18 @@ router.post('/adicionaProjeto', createProjeto);
  *          type: string
  *        description: Id de um projeto.
  *        required: true
+ *    requestBody:
+ *      content:
+ *        application/json:
+ *          schema:
+ *            $ref: '#/components/schemas/Projeto'
  *    responses:
  *      '200':
  *         description: Sucesso.
  *         content:
  *           application/json:
  *             schema:
- *               allOf:
- *                 - type: object
- *                   properties:
- *                     id:
- *                       type: string
- *                 - $ref: '#/components/schemas/Projeto'
+ *               $ref: '#/components/schemas/Projeto_Response'
  *      '404':
  *         description: Não foi possível encontrar este projeto.
  *      '400':
@@ -164,10 +205,11 @@ router.post('/adicionaProjeto', createProjeto);
  */
 router.patch('/:id', updateProjeto);
 
-// DELETE - deleta um pesquisador
 /**
+ * // DELETE - deleta um Projeto
+ *
  * @swagger
- * /api/projetos/{id}:
+ * /api/projeto/{id}:
  *  delete:
  *    summary: Deleta um projeto a partir de seu id.
  *    tags: [Projeto]
