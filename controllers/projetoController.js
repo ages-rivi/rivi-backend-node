@@ -5,19 +5,19 @@ const prisma = new PrismaClient();
 const getAllProjetos = async (req, res) => {
   try {
     const projetos = await prisma.projeto.findMany({
-      select:{
+      select: {
         id: true,
         titulo: true,
         descricao: true,
         estado: true,
-        tag: true,
+        tags: true,
         pesquisadores: {
           select: {
             nome: true,
-            afiliacao: true
-          }
-        }
-      }
+            afiliacao: true,
+          },
+        },
+      },
     });
     console.log(projetos);
     return res.status(200).json(projetos);
@@ -34,19 +34,19 @@ const getProjeto = async (req, res) => {
       where: {
         id: id,
       },
-      select:{
+      select: {
         id: true,
         titulo: true,
         descricao: true,
         estado: true,
-        tag: true,
+        tags: true,
         pesquisadores: {
           select: {
             nome: true,
-            afiliacao: true
-          }
-        }
-      }
+            afiliacao: true,
+          },
+        },
+      },
     });
     if (!projeto) {
       return res.status(404).json({ error: 'Não foi possível encontrar este projeto.' });
@@ -60,19 +60,21 @@ const getProjeto = async (req, res) => {
 
 // POST - cria um projeto
 const createProjeto = async (req, res) => {
-  const { titulo, descricao, estado, tag, pesquisadores } = req.body;
+  const { titulo, descricao, estado, tags, pesquisadoresIds } = req.body;
 
   try {
-    let novosPesquisadores = pesquisadores.map((element) => {return {id: element}});
+    let novosPesquisadores = pesquisadoresIds.map((element) => {
+      return { id: element };
+    });
     projeto = await prisma.projeto.create({
       data: {
         titulo,
         descricao,
         estado,
-        tag: tag != null ? tag : undefined,
+        tags: tags != null ? tags : undefined,
         pesquisadores: {
-          connect: novosPesquisadores
-        }
+          connect: novosPesquisadores,
+        },
       },
     });
     console.log(projeto);
@@ -86,7 +88,7 @@ const createProjeto = async (req, res) => {
 const updateProjeto = async (req, res) => {
   try {
     const { id } = req.params;
-    const { titulo, descricao, estado, tag, pesquisadores } = req.body;
+    const { titulo, descricao, estado, tags, pesquisadores } = req.body;
 
     let projeto = await prisma.projeto.findUnique({
       where: {
@@ -97,33 +99,36 @@ const updateProjeto = async (req, res) => {
       return res.status(404).json({ error: 'Não foi possível encontrar este projeto.' });
     }
 
-    if(pesquisadores != null) {
-      let deletaPesquisadores = projeto.pesquisadoresIds.filter(element => pesquisadores.includes(element)).map((element) => {
-        return {id: element};
-      });
-      let adicionaPesquisadores = pesquisadores.filter(element => !projeto.pesquisadoresIds.includes(element)).map((element) => {
-        return {id: element};
-      });
-      
-      if(deletaPesquisadores.length > 0) {
+    if (pesquisadores != null) {
+      let deletaPesquisadores = projeto.pesquisadoresIds
+        .filter((element) => pesquisadores.includes(element))
+        .map((element) => {
+          return { id: element };
+        });
+      let adicionaPesquisadores = pesquisadores
+        .filter((element) => !projeto.pesquisadoresIds.includes(element))
+        .map((element) => {
+          return { id: element };
+        });
+
+      if (deletaPesquisadores.length > 0) {
         projeto = await prisma.projeto.update({
-          where: {id: id},
+          where: { id: id },
           data: {
-            pesquisadores: { disconnect: deletaPesquisadores }
-          }
+            pesquisadores: { disconnect: deletaPesquisadores },
+          },
         });
       }
-      if(adicionaPesquisadores.length > 0) {
+      if (adicionaPesquisadores.length > 0) {
         projeto = await prisma.projeto.update({
-          where: {id: id},
+          where: { id: id },
           data: {
-            pesquisadores: { connect: adicionaPesquisadores }
-          }
+            pesquisadores: { connect: adicionaPesquisadores },
+          },
         });
       }
     }
-    
-    
+
     projeto = await prisma.projeto.update({
       where: {
         id: id,
@@ -132,7 +137,7 @@ const updateProjeto = async (req, res) => {
         titulo,
         descricao,
         estado,
-        tag: tag,
+        tags: tags,
       },
     });
     console.log(projeto);
