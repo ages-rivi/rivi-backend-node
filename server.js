@@ -23,6 +23,9 @@ const swaggerOptions = {
       {
         url: 'http://localhost:4000',
       },
+      {
+        url: 'https://rivi-backend-node.onrender.com',
+      },
     ],
   },
   apis: ['./routes/*.js'],
@@ -53,7 +56,7 @@ mongoose
 // set routes
 app.use('/api/pesquisadores', require('./routes/pesquisadores'));
 app.use('/api/article', require('./routes/artigos'));
-app.use('/api/projetos', require('./routes/projetos'));
+app.use('/api/projeto', require('./routes/projetos'));
 
 app.get('/', (req, res) => {
   res.send('UP!');
