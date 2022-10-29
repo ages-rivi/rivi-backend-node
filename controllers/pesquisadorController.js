@@ -90,7 +90,33 @@ const updatePesquisador = async (req, res) => {
       return res.json({ error: 'Não foi possível encontrar este pesquisador.' });
     }
 
-    pesquisador = await prisma.pesquisador.update({
+    let adicionaProjetos = projetos.filter(element => !pesquisador.projetosIds.includes(element)).map(function(element) {
+      return {id: element};
+    });
+    let deletaProjetos = pesquisador.projetosIds.filter(element => projetos.includes(element)).map(function(element) {
+      return {id: element};
+    });
+
+    if(deletaProjetos.length > 0) {
+      pesquisador = await prisma.pesquisador.update({
+        where: {id: id},
+        data: {
+          projetos: { disconnect: deletaProjetos }
+        }
+      });
+    } 
+    if(adicionaProjetos.length > 0) {
+      pesquisador = await prisma.pesquisador.update({
+        where: {id: id},
+        data: {
+          projetos: { connect: adicionaProjetos }
+        }
+      });
+    }
+
+    pesquisador.contatos.push(contatos);
+  
+    let updatedPesquisador = await prisma.pesquisador.update({
       where: {
         id: id,
       },
@@ -101,10 +127,7 @@ const updatePesquisador = async (req, res) => {
         afiliacao,
         tag: tag,
         foto: foto,
-        contatos: contatos,
-        projetos: {
-          create: [projetos.titulo, projetos.descricao, projetos.estado, projetos.tag],
-        },
+        contatos: pesquisador.contatos,
         artigos: {
           create: [
             artigos.doi,
@@ -118,8 +141,8 @@ const updatePesquisador = async (req, res) => {
         },
       },
     });
-    console.log(pesquisador);
-    return res.json(pesquisador);
+    console.log(updatedPesquisador);
+    return res.json(updatedPesquisador);
   } catch (error) {
     return res.json({ error });
   }

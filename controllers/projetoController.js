@@ -4,7 +4,21 @@ const prisma = new PrismaClient();
 // GET - retorna todos projetos
 const getAllProjetos = async (req, res) => {
   try {
-    const projetos = await prisma.projeto.findMany();
+    const projetos = await prisma.projeto.findMany({
+      select:{
+        id: true,
+        titulo: true,
+        descricao: true,
+        estado: true,
+        tag: true,
+        pesquisadores: {
+          select: {
+            nome: true,
+            afiliacao: true
+          }
+        }
+      }
+    });
     console.log(projetos);
     return res.status(200).json(projetos);
   } catch (error) {
@@ -20,6 +34,19 @@ const getProjeto = async (req, res) => {
       where: {
         id: id,
       },
+      select:{
+        id: true,
+        titulo: true,
+        descricao: true,
+        estado: true,
+        tag: true,
+        pesquisadores: {
+          select: {
+            nome: true,
+            afiliacao: true
+          }
+        }
+      }
     });
     if (!projeto) {
       return res.status(404).json({ error: 'Não foi possível encontrar este projeto.' });
@@ -36,23 +63,16 @@ const createProjeto = async (req, res) => {
   const { titulo, descricao, estado, tag, pesquisadores } = req.body;
 
   try {
+    let novosPesquisadores = pesquisadores.map((element) => {return {id: element}});
     projeto = await prisma.projeto.create({
       data: {
         titulo,
         descricao,
         estado,
-        tag: tag,
+        tag: tag != null ? tag : undefined,
         pesquisadores: {
-          create: [
-            pesquisadores.nome,
-            pesquisadores.email,
-            pesquisadores.descricao,
-            pesquisadores.afiliacao,
-            pesquisadores.tag,
-            pesquisadores.foto,
-            pesquisadores.contatos,
-          ],
-        },
+          connect: novosPesquisadores
+        }
       },
     });
     console.log(projeto);
@@ -77,6 +97,33 @@ const updateProjeto = async (req, res) => {
       return res.status(404).json({ error: 'Não foi possível encontrar este projeto.' });
     }
 
+    if(pesquisadores != null) {
+      let deletaPesquisadores = projeto.pesquisadoresIds.filter(element => pesquisadores.includes(element)).map((element) => {
+        return {id: element};
+      });
+      let adicionaPesquisadores = pesquisadores.filter(element => !projeto.pesquisadoresIds.includes(element)).map((element) => {
+        return {id: element};
+      });
+      
+      if(deletaPesquisadores.length > 0) {
+        projeto = await prisma.projeto.update({
+          where: {id: id},
+          data: {
+            pesquisadores: { disconnect: deletaPesquisadores }
+          }
+        });
+      }
+      if(adicionaPesquisadores.length > 0) {
+        projeto = await prisma.projeto.update({
+          where: {id: id},
+          data: {
+            pesquisadores: { connect: adicionaPesquisadores }
+          }
+        });
+      }
+    }
+    
+    
     projeto = await prisma.projeto.update({
       where: {
         id: id,
@@ -86,17 +133,6 @@ const updateProjeto = async (req, res) => {
         descricao,
         estado,
         tag: tag,
-        pesquisadores: {
-          create: [
-            pesquisadores.nome,
-            pesquisadores.email,
-            pesquisadores.descricao,
-            pesquisadores.afiliacao,
-            pesquisadores.tag,
-            pesquisadores.foto,
-            pesquisadores.contatos,
-          ],
-        },
       },
     });
     console.log(projeto);
