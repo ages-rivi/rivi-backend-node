@@ -12,8 +12,10 @@ module.exports = {
         descricao: true,
         estado: true,
         tags: true,
+        pesquisadoresIds: true,
         pesquisadores: {
           select: {
+            id: true,
             nome: true,
             afiliacao: true,
           },

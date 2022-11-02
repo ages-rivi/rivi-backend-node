@@ -1,11 +1,5 @@
 const express = require('express');
-const {
-  getAllProjetos,
-  getProjeto,
-  createProjeto,
-  updateProjeto,
-  deleteProjeto,
-} = require('../controllers/projetoController');
+var controller = require('../controllers/projetoController');
 
 const router = express.Router();
 
@@ -72,11 +66,17 @@ const router = express.Router();
  *           type: array
  *           items:
  *             type: string
+ *         pesquisadoresIds:
+ *           type: array
+ *           items:
+ *             type: string
  *         pesquisadores:
  *           type: array
  *           items:
  *             type: object
  *             properties:
+ *               id:
+ *                 type: string
  *               nome:
  *                 type: string
  *               afiliacao:
@@ -88,10 +88,13 @@ const router = express.Router();
  *         descricao: Ultimamente destacam-se os esforços...
  *         estado: ativo
  *         tags: [Cyberbullying, Autoestima, Depressão]
+ *         pesquisadoresIds: [6338da2020e0b5c916df9917, 6338df7e68a0b1749472b8cd]
  *         pesquisadores:
- *           - nome: Lucas
+ *           - id: 6338da2020e0b5c916df9917
+ *             nome: Lucas
  *             afiliacao: PUCRS
- *           - nome: Fernando
+ *           - id: 6338df7e68a0b1749472b8cd
+ *             nome: Fernando
  *             afiliacao: UFGRS
  */
 
@@ -115,7 +118,7 @@ const router = express.Router();
  *      '400':
  *         description: Requisição falhou.
  */
-router.get('/', getAllProjetos);
+router.get('/', controller.getAllProjetos);
 
 /**
  * // GET - retorna um único Projeto
@@ -144,7 +147,7 @@ router.get('/', getAllProjetos);
  *      '400':
  *         description: Requisição falhou.
  */
-router.get('/:id', getProjeto);
+router.get('/:id', controller.getProjeto);
 
 /**
  * // POST - cria um Projeto
@@ -169,7 +172,7 @@ router.get('/:id', getProjeto);
  *      '400':
  *         description: Requisição falhou.
  */
-router.post('/adicionaProjeto', createProjeto);
+router.post('/adicionaProjeto', controller.createProjeto);
 
 /**
  * // PATCH - atualiza um Projeto
@@ -203,7 +206,7 @@ router.post('/adicionaProjeto', createProjeto);
  *      '400':
  *         description: Requisição falhou.
  */
-router.patch('/:id', updateProjeto);
+router.patch('/:id', controller.updateProjeto);
 
 /**
  * // DELETE - deleta um Projeto
@@ -228,6 +231,6 @@ router.patch('/:id', updateProjeto);
  *      '400':
  *         description: Requisição falhou.
  */
-router.delete('/:id', deleteProjeto);
+router.delete('/:id', controller.deleteProjeto);
 
 module.exports = router;
