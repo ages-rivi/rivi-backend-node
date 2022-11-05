@@ -47,6 +47,7 @@ model Projeto {
   descricao String
   estado String
   tags String[]
+  link String
   pesquisadoresIds String[] @db.ObjectId
   pesquisadores Pesquisador[] @relation(fields: [pesquisadoresIds], references: [id])
 }

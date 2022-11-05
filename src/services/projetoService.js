@@ -12,6 +12,7 @@ module.exports = {
         descricao: true,
         estado: true,
         tags: true,
+        link: true,
         pesquisadoresIds: true,
         pesquisadores: {
           select: {
@@ -39,7 +40,7 @@ module.exports = {
 
   // POST - cria um projeto
   createProjeto: async function (req, res) {
-    const { titulo, descricao, estado, tags, pesquisadoresIds } = req.body;
+    const { titulo, descricao, estado, tags, link, pesquisadoresIds } = req.body;
     let novosPesquisadores = pesquisadoresIds.map((element) => {
       return { id: element };
     });
@@ -49,6 +50,7 @@ module.exports = {
         descricao,
         estado,
         tags: tags != null ? tags : undefined,
+        link,
         pesquisadores: {
           connect: novosPesquisadores,
         },
@@ -61,7 +63,7 @@ module.exports = {
   // UPDATE - atualiza um projeto
   updateProjeto: async function (req, res) {
     const { id } = req.params;
-    const { titulo, descricao, estado, tag, pesquisadoresIds } = req.body;
+    const { titulo, descricao, estado, tags, link, pesquisadoresIds } = req.body;
 
     let projeto = await findUniqueProjeto(id);
     if (!projeto) {
@@ -107,7 +109,8 @@ module.exports = {
         titulo,
         descricao,
         estado,
-        tag: tag,
+        tags: tags,
+        link,
       },
     });
     console.log(projeto);
@@ -144,6 +147,7 @@ async function findUniqueProjeto(id) {
       descricao: true,
       estado: true,
       tags: true,
+      link: true,
       pesquisadoresIds: true,
       pesquisadores: {
         select: {

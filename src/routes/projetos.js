@@ -16,6 +16,7 @@ const router = express.Router();
  *         - descricao
  *         - estado
  *         - tags
+ *         - link
  *         - pesquisadoresIds
  *       properties:
  *         titulo:
@@ -30,6 +31,8 @@ const router = express.Router();
  *            items:
  *              type: string
  *            description: array de tags que o projeto possui.
+ *         link:
+ *            type: string
  *         pesquisadoresIds:
  *            type: array
  *            items:
@@ -40,6 +43,7 @@ const router = express.Router();
  *         descricao: Ultimamente destacam-se os esforços...
  *         estado: ativo
  *         tags: [Cyberbullying, Autoestima, Depressão]
+ *         link: https://www.google.com.br/
  *         pesquisadoresIds: [6338da2020e0b5c916df9917, 6338df7e68a0b1749472b8cd]
  */
 
@@ -66,6 +70,8 @@ const router = express.Router();
  *           type: array
  *           items:
  *             type: string
+ *         link:
+ *           type: string
  *         pesquisadoresIds:
  *           type: array
  *           items:
@@ -88,6 +94,7 @@ const router = express.Router();
  *         descricao: Ultimamente destacam-se os esforços...
  *         estado: ativo
  *         tags: [Cyberbullying, Autoestima, Depressão]
+ *         link: https://www.google.com.br/
  *         pesquisadoresIds: [6338da2020e0b5c916df9917, 6338df7e68a0b1749472b8cd]
  *         pesquisadores:
  *           - id: 6338da2020e0b5c916df9917
