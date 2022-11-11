@@ -7,34 +7,6 @@ datasource db {
   url = env("MONGO_URI")
 }
 
-model Usuario {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
-  nome String
-  username String @unique
-  email String @unique
-  senha String
-  genero String
-  dataNasc DateTime 
-  notificacao Boolean
-  interesse String[]
-  questionariosIds String[] @db.ObjectId
-  questionarios Questionario[] @relation(fields: [questionariosIds], references: [id])
-  tags String[]
-}
-
-model Questionario {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
-  titulo String
-  termo String
-  descricao String
-  link String
-  calculo String
-  usuariosIds String[] @db.ObjectId
-  usuarios Usuario[] @relation(fields: [usuariosIds], references: [id])
-  tags String[]
-}
-
-
 model Tag {
   id String @id @default(auto()) @map("_id") @db.ObjectId
   nome String @unique
@@ -73,8 +45,8 @@ model Article {
   description String
   category String
   tags String[]
+  doi String
   abstract String
-  authors String []
   location String
   date String
   pdf_link String
