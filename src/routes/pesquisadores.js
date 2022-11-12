@@ -5,17 +5,17 @@ const router = express.Router();
 
 // GET - retorna todos pesquisadores
 router.get('/', controller.getAllPesquisadores);
+
 // GET - retorna um único pesquisador
 router.get('/:id', controller.getPesquisador);
+
 // POST - cria um pesquisador
 router.post('/adicionaPesquisador', controller.createPesquisador);
-/*
-
 
 // UPDATE - atualiza um pesquisador
-router.patch('/:id', updatePesquisador);
+router.patch('/:id', controller.updatePesquisador);
 
 // DELETE - deleta um pesquisador
-router.delete('/:id', deletePesquisador);
-*/
+router.delete('/:id', controller.deletePesquisador);
+
 module.exports = router;
