@@ -1,27 +1,21 @@
 const express = require('express');
-const {
-  createPesquisador,
-  getAllPesquisadores,
-  getPesquisador,
-  updatePesquisador,
-  deletePesquisador,
-} = require('../controllers/pesquisadorController');
+const controller = require('../controllers/pesquisadorController');
 
 const router = express.Router();
 
 // GET - retorna todos pesquisadores
-router.get('/', getAllPesquisadores);
-
+router.get('/', controller.getAllPesquisadores);
 // GET - retorna um único pesquisador
-router.get('/:id', getPesquisador);
-
+router.get('/:id', controller.getPesquisador);
 // POST - cria um pesquisador
-router.post('/adicionaPesquisador', createPesquisador);
+router.post('/adicionaPesquisador', controller.createPesquisador);
+/*
+
 
 // UPDATE - atualiza um pesquisador
 router.patch('/:id', updatePesquisador);
 
 // DELETE - deleta um pesquisador
 router.delete('/:id', deletePesquisador);
-
+*/
 module.exports = router;
