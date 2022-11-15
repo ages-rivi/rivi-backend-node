@@ -45,7 +45,6 @@ model Article {
   description String
   category String
   tags String[]
-  doi String
   abstract String
   location String
   date String
