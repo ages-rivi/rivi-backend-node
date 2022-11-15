@@ -1,11 +1,6 @@
-const { PrismaClient } = require('@prisma/client');
-const { ModuleResolutionKind } = require('typescript');
-const prisma = new PrismaClient();
 const service = require('../services/pesquisadorService');
 
 module.exports = {
-
-
   // GET - retorna todos pesquisadores
   getAllPesquisadores: async (req, res) => {
     try {
@@ -19,8 +14,8 @@ module.exports = {
   // GET - retorna um único pesquisador
   getPesquisador: async (req, res) => {
     try {
-      const pesquisador = await service.getPesquisador(req, res)
-      return res.status(200).json(pesquisador)
+      const pesquisador = await service.getPesquisador(req, res);
+      return res.status(200).json(pesquisador);
     } catch (error) {
       return res.status(400).json({ error: error.message });
     }
@@ -29,8 +24,8 @@ module.exports = {
   // POST - cria um pesquisador
   createPesquisador: async (req, res) => {
     try {
-      const pesquisador = await service.createPesquisador(req, res)
-      return res.status(200).json(pesquisador)
+      const pesquisador = await service.createPesquisador(req, res);
+      return res.status(200).json(pesquisador);
     } catch (error) {
       return res.status(400).json({ error: error.message });
     }
@@ -39,8 +34,8 @@ module.exports = {
   // UPDATE - atualiza um pesquisador
   updatePesquisador: async (req, res) => {
     try {
-      const pesquisador = await service.updatePesquisador(req, res)
-      return res.status(200).json(pesquisador)
+      const pesquisador = await service.updatePesquisador(req, res);
+      return res.status(200).json(pesquisador);
     } catch (error) {
       return res.status(400).json({ error: error.message });
     }
