@@ -1,11 +1,5 @@
 const express = require('express');
-const {
-  createPesquisador,
-  getAllPesquisadores,
-  getPesquisador,
-  updatePesquisador,
-  deletePesquisador,
-} = require('../controllers/pesquisadorController');
+const controller = require('../controllers/pesquisadorController');
 
 const router = express.Router();
 
@@ -89,7 +83,7 @@ const router = express.Router();
  *      '400':
  *         description: Requisição falhou.
  */
-router.get('/', getAllPesquisadores);
+router.get('/', controller.getAllPesquisadores);
 
 // GET - retorna um único pesquisador
 /**
@@ -122,7 +116,7 @@ router.get('/', getAllPesquisadores);
  *      '400':
  *         description: Requisição falhou.
  */
-router.get('/:id', getPesquisador);
+router.get('/:id', controller.getPesquisador);
 
 // POST - cria um pesquisador
 /**
@@ -152,7 +146,7 @@ router.get('/:id', getPesquisador);
  *      '400':
  *         description: Requisição falhou.
  */
-router.post('/adicionaPesquisador', createPesquisador);
+router.post('/adicionaPesquisador', controller.createPesquisador);
 
 // UPDATE - atualiza um pesquisador
 /**
@@ -185,7 +179,7 @@ router.post('/adicionaPesquisador', createPesquisador);
  *      '400':
  *         description: Requisição falhou.
  */
-router.patch('/:id', updatePesquisador);
+router.patch('/:id', controller.updatePesquisador);
 
 // DELETE - deleta um pesquisador
 /**
@@ -209,6 +203,6 @@ router.patch('/:id', updatePesquisador);
  *      '400':
  *         description: Requisição falhou.
  */
-router.delete('/:id', deletePesquisador);
+router.delete('/:id', controller.deletePesquisador);
 
 module.exports = router;
